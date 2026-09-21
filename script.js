@@ -1,4 +1,4 @@
-// Simple light/dark theme toggle, remembered for the visitor's session.
+// Theme toggle, remembered for the visitor's session.
 (function () {
   const root = document.documentElement;
   const toggleBtn = document.getElementById("theme-toggle");
@@ -42,5 +42,23 @@
       }
     });
   });
-})();
 
+  // Reveal sections as they scroll into view.
+  const revealEls = document.querySelectorAll(".reveal");
+  if ("IntersectionObserver" in window && revealEls.length) {
+    const observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+    revealEls.forEach(function (el) { observer.observe(el); });
+  } else {
+    revealEls.forEach(function (el) { el.classList.add("is-visible"); });
+  }
+})();
